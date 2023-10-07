@@ -1,0 +1,33 @@
+{% extends "openid/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}OpenID Sign In{% endblock %}
+
+{% block content %}
+            {% include 'navbar.html' %}
+
+    <section class="banner-area organic-breadcrumb" style="background: antiquewhite">
+
+        <div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Account</h1>
+					<nav class="d-flex align-items-center">
+						<a href="/">Home</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+
+<h1>{% trans 'OpenID Sign In' %}</h1>
+
+
+<form id="openid_login_form" class="openid_login" method="post" action="{% url 'openid_login' %}">
+{% csrf_token %}
+{{form.as_p}}
+<button type="submit">Sign In</button>
+</form>
+
+{% endblock %}

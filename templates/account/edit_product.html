@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load cart_template_tags %}
+
+{% load static %}
+
+{% block title %}Add product{% endblock %}
+
+{% block content %}
+
+  <!--Main layout-->
+  <main>
+  <!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb" style="background: darkslategray">
+
+        <div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Edit A product</h1>
+					<nav class="d-flex align-items-center">
+						<a href="/">Home</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+      <br>
+    <div class="container">
+      <!--Section: Products v.3-->
+    <h3>Product Details</h3>
+      <section class="text-left form mb-4">
+          <form method="post" action="." enctype="multipart/form-data">
+              {% csrf_token %}
+
+              {{ form.as_p }}
+              <br/>
+              {{ form.media }}
+
+              <button class="btn btn-outline-blue-grey btn-primary btn-md my-0 p">Submit</button>
+          </form>
+      </section>
+    </div>
+  </main>
+  <!--Main layout-->
+
+
+
+{% endblock content %}

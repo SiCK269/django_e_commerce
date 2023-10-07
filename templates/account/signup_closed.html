@@ -1,0 +1,27 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load cart_template_tags %}
+
+{% block head_title %}{% trans "Sign Up Closed" %}{% endblock %}
+
+{% block content %}
+    <section class="banner-area organic-breadcrumb" style="background: darkslategray">
+
+        <div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Account</h1>
+					<nav class="d-flex align-items-center">
+						<a href="/">Home</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+<h1>{% trans "Sign Up Closed" %}</h1>
+
+<p>{% trans "We are sorry, but the sign up is currently closed." %}</p>
+    {% include 'scripts.html' %}
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load cart_template_tags %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<head>
+	<!-- Site Title -->
+	<title>{% translate 'Shop by Categories' %}</title>
+
+</head>
+
+<body id="category">
+	<!-- Start Banner Area -->
+    {% for item in object_list %}
+        {% if forloop.first %}
+	<section class="banner-area organic-breadcrumb" style="background: url('{{ item.banner.url }}')">
+        {% endif %}
+		{% endfor %}
+        <div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>{% translate 'Categories' %}</h1>
+					<nav class="d-flex align-items-center">
+						<a href="/">{% translate 'Home' %}</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+	<div class="container">
+		<div class="row">
+			<div class="col-xl-9 col-lg-8 col-md-7">
+				<!-- Start Best Seller -->
+				<section class="lattest-product-area pb-40 category-list">
+					<div class="row">
+						<!-- single product -->
+                        {% for item in object_list %}
+						<div class="col-lg-4 col-md-6">
+							<div class="single-product">
+                                <a href="{{ item.get_absolute_url }}"><img style="max-height: 150px" class="img-fluid" src="{{ item.image.url }}" alt="">										</a>
+                                <div class="product-details text-center">
+									<strong>{{ item.name }}</strong>
+								</div>
+							</div>
+						</div>
+                        {% endfor %}
+					</div>
+				</section>
+				<!-- End Best Seller -->
+				<!-- Start Filter Bar -->
+				</div>
+				<!-- End Filter Bar -->
+			</div>
+		</div>
+</body>
+        {% include 'scripts.html' %}
+
+
+{% endblock content %}

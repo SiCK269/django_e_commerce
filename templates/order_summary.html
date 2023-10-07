@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load cart_template_tags %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+
+<head>
+    <title>{% translate 'Summary' %}</title>
+</head>
+
+<body>
+    <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb" style="background: cadetblue">
+        <div class="container">
+            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                <div class="col-first">
+                    <h1>Cart</h1>
+                    <nav class="d-flex align-items-center">
+                        <a href="/">{% translate 'Home' %}</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Banner Area -->
+
+    <!--================Cart Area =================-->
+    <section class="cart_area">
+        <div class="container">
+            <div class="cart_inner">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">{% translate 'Product' %}</th>
+                                <th scope="col">{% translate 'Price' %}</th>
+                                <th scope="col">{% translate 'Quantity' %}</th>
+                                <th scope="col">{% translate 'Total' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for order_item in object.items.all %}
+                            <tr>
+                                <td>
+                                     <div class="media">
+                                        <div class="d-flex">
+                                            <img width="100px" src="{{ order_item.item.image_main.url }}" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <p>{{ order_item.item.title }}</p>
+                                        </div>
+                                    </div></td>
+                                <td>
+                                    {% if order_item.item.discount_price %}
+                                    <h5>${{ order_item.item.discount_price }}</h5>
+                                    {% else %}
+                                    <h5>${{ order_item.item.price }}</h5>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="product_count">
+                                        <input type="text" name="qty" id="sst" maxlength="12" value={{ order_item.quantity }} title="Quantity:"
+                                            class="input-text qty">
+                                        <a href="{% url 'core:add-to-cart' order_item.item.slug %}"><button class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button></a>
+                                        <a href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}"><button class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button></a>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if order_item.item.discount_price %}
+                                        <h5>${{ order_item.get_total_discount_item_price }}</h5>
+                                        <span class="badge badge-primary">Saving ${{ order_item.get_amount_saved }}</span>
+                                    {% else %}
+                                        <h5>${{ order_item.get_total_item_price }}</h5>
+                                    {% endif %}
+                                        <a style='color: red;' href="{% url 'core:remove-from-cart' order_item.item.slug %}">
+                                            <i class="lnr lnr-trash"></i>
+                                        </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan='5'>{% translate 'Your cart is empty' %}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <h5>{% translate 'Subtotal' %}</h5>
+                                </td>
+                                <td>
+                                    <h5>${{ object.get_total }}</h5>
+                                </td>
+                            </tr>
+
+                            <tr class="out_button_area">
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <div class="checkout_btn_inner d-flex align-items-center">
+                                        <a class="gray_btn" href="/">{% translate 'Continue Shopping' %}</a>
+                                        <a class="primary-btn" href="/checkout/">{% translate 'Proceed to checkout' %}</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================End Cart Area =================-->
+
+</body>
+    {% include 'scripts.html' %}
+
+{% endblock content %}
+

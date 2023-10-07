@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load cart_template_tags %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block content %}
+    <head>
+    <title>{% translate 'Request A Refund' %}</title>
+    </head>
+  <main>
+  	<section class="banner-area organic-breadcrumb" style="background: darkgray">
+
+        <div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>{% translate 'Request A Refund' %}</h1>
+					<nav class="d-flex align-items-center">
+						<a href="/">{% translate 'Home' %}</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+    </section>
+    <div class="container">
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type='submit' class='btn btn-primary'>{% translate 'Submit' %}</button>
+    </form>
+
+    </div>
+  </main>
+    {% include 'scripts.html' %}
+
+{% endblock content %}
+
+

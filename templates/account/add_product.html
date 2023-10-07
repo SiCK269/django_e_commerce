@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load cart_template_tags %}
+
+{% load static %}
+
+{% block title %}Add product{% endblock %}
+
+{% block content %}
+
+  <!--Main layout-->
+  <main>
+  <!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb" style="background: forestgreen">
+
+        <div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Add A product</h1>
+					<nav class="d-flex align-items-center">
+						<a href="/">Home</a><spin class="ti ti-arrow-right"></spin>
+						<a href="/vendor">My store</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+      <br>
+    <div class="container">
+      <!--Section: Products v.3-->
+    <h3>Product Details</h3>
+      <section class="text-left form mb-4">
+          <form method="post" action="." enctype="multipart/form-data">
+              {% csrf_token %}
+
+              {{ form.as_p }}
+              <br/>
+              {{ form.media }}
+
+              <button class="btn btn-outline-blue-grey btn-primary btn-md my-0 p">Submit</button>
+          </form>
+          <!--
+          <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+              <div id="reader" width="600px" height="600px"></div>
+
+              <form id="form_isbn" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Submit">
+              </form>
+
+              <script>
+            function onScanSuccess(decodedText, decodedResult) {
+              // handle the scanned code as you like, for example:
+              console.log(`Code matched = ${decodedText}`, decodedResult);
+              document.getElementById('id_isbn').value = decodedText;
+              document.getElementById('form_isbn').submit();
+            }
+
+            function onScanFailure(error) {
+              // handle scan failure, usually better to ignore and keep scanning.
+              // for example:
+              console.warn(`Code scan error = ${error}`);
+            }
+
+            let html5QrcodeScanner = new Html5QrcodeScanner(
+              "reader",
+              { fps: 10, qrbox: {width: 250, height: 250} },
+              /* verbose= */ false);
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+              </script>
+          -->
+      </section>
+    </div>
+  </main>
+  <!--Main layout-->
+
+
+
+{% endblock content %}

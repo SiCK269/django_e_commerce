@@ -1,0 +1,105 @@
+{% load cart_template_tags %}
+{% load static %}
+{% load i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+
+      <header class="header_area sticky-header">
+		<div class="main_menu">
+			<nav class="navbar navbar-expand-lg navbar-light main_box">
+				<div class="container">
+					<!-- Brand and toggle get grouped for better mobile display -->
+                    {% for item in logo %}
+                        {% for language in languages %}
+                            {% if language.code == LANGUAGE_CODE %}
+					<a class="navbar-brand logo_h" href="/{{ language.code }}/">
+                        <img width="120px" src="{{ item.logo.url }}" alt=""></a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+						<ul class="nav navbar-nav menu_nav ml-auto">
+                        {% for language in languages %}
+                            {% if language.code == LANGUAGE_CODE %}
+							<li class="nav-item active"><a class="nav-link" href="/{{ language.code }}/">{% translate 'Home' %}</a></li>
+							<li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">{% translate 'Shop' %}</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" href="/{{ language.code }}/categories">{% translate 'Categories' %}</a></li>
+									<li class="nav-item"><a class="nav-link" href="/{{ language.code }}/brands">{% translate 'Brands' %}</a></li>
+									<li class="nav-item"><a class="nav-link" href="/{{ language.code }}/collections">{% translate 'Collections' %}</a></li>
+									<li class="nav-item"><a class="nav-link" href="/{{ language.code }}/sellers">{% translate 'Vendors' %}</a></li>
+								</ul>
+                            </li>
+                            {% endif %}
+							{% endfor %}
+                            <li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">{% translate 'Languages' %}</a>
+								<ul class="dropdown-menu">
+                                    {% for language in languages %}
+									<li class="nav-item"><a class="nav-link" href="/{{ language.code }}/"
+                                    {% if language.code == CURRENT_LANGUAGE %} class="active"{% endif %}>
+                                    {{ language.name_local }}
+                                  </a></li>
+									{% endfor %}
+								</ul>
+                            </li>
+                            {% if request.user.is_authenticated %}
+                                <li class="nav-item"><a href="{% url 'core:order-summary' %}" class="nav-link">{{ request.user|cart_item_count }} <span class="ti-shopping-cart"></span></a></li>
+                                <li class="nav-item submenu dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">{% translate 'Account' %}</a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item"><a href="{% url 'account_logout' %}" class="nav-link">
+                                        {% translate 'Logout' %} {{ request.user }}
+                                    </a></li>
+                                    <li class="nav-item"><a href="{% url 'core:request-refund' %}" class="nav-link">
+                                    {% translate 'Request a Refund' %}
+                                    </a></li>
+                                    <li class="nav-item"><a href="{% url 'core:wishlist' %}" class="nav-link">{% translate 'Wishlist' %}</a></li>
+                                        {% if request.user.is_staff %}
+                                        <li class="nav-item"><a href="{% url 'core:vendor' %}" class="nav-link">
+                                            {% translate 'My Store' %}
+                                        </a></li>
+                                        {% endif %}
+                                    {% else %}
+                                    <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'account_login' %}">
+                                        {% translate 'Login' %}
+                                    </a>
+                                    </li>
+                                    <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'account_signup' %}">
+                                        {% translate 'Signup' %}
+                                    </a>
+                                    </li>
+                                    </ul>
+                                    </li>
+                                <hr/>
+                                    {% endif %}
+
+                                </ul>
+                                <li style="list-style: none" class="nav-item active">
+                                    <form class="navbar-left navbar-search-block" method=POST action="{% url 'core:search' %}">
+                                      {% csrf_token %}
+                                    <div class="md-form my-0">
+                                      <input class="form-control mr-sm-2" name="inquiry" type="text" placeholder={% translate "Search" %} aria-label="Search">
+                                    </div>
+                                  </form>
+                                </li>
+					        </div>
+				        </div>
+			        </nav>
+		        </div>
+	</header>

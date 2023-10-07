@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load cart_template_tags %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<head>
+	<!-- Site Title -->
+	<title>{{ cat }}</title>
+
+</head>
+
+<body id="category">
+	<!-- Start Banner Area -->
+    {% for item in objects %}
+        {% if forloop.first %}
+	<section class="banner-area organic-breadcrumb" style="background: url('{{ item.category.banner.url }}')">
+        {% endif %}
+		{% endfor %}
+        <div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>{{ cat }}</h1>
+					<nav class="d-flex align-items-center">
+						<a href="/">{% translate 'Home' %}</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+	<div class="container">
+		<div class="row">
+			<div class="col-xl-9 col-lg-8 col-md-7">
+				<!-- Start Best Seller -->
+				<section class="lattest-product-area pb-40 category-list">
+					<div class="row">
+						<!-- single product -->
+                        {% for item in objects %}
+						<div class="col-lg-4 col-md-6">
+							<div class="single-product">
+                                <a href="{{ item.get_absolute_url }}"><img class="img-fluid" src="{{ item.image_main.url }}" alt=""></a>
+								<div class="product-details">
+									<div class="price">
+                                        {% if item.discount_price %}
+                                            <strong class="text-capitalize">{{ item.title }}</strong><br>|
+										<h6 class="text-black-50">${{ item.discount_price }}</h6>
+										<h6 class="l-through">${{ item.price }}</h6>
+                                        {% else %}
+                                        <strong class="text-capitalize">{{ item.title }}</strong><br>|
+                                        <h6>${{ item.price }}</h6>
+                                        {% endif %}
+									</div>
+									<div class="prd-bottom">
+                                    {% if item.quantity > 0 %}
+									<a href="{{ item.get_add_to_cart_url }}" class="social-info">
+										<span class="ti-bag"></span>
+										<p class="hover-text">{% translate 'add to cart' %}</p>
+									</a>
+                                    {% else %}
+									<a class="social-info">
+										<span class="ti-alert"></span>
+										<p class="hover-text">{% translate 'Out of Stock!!' %}</p>
+									</a>
+                                    {% endif %}
+									<a href="{% url "core:user_wishlist" item.id %}" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">{% translate 'Wishlist' %}</p>
+									</a>
+                                {% if item.discount_price %}
+                                <a class="social-info">
+										<span>%</span>
+										<p class="hover-text">{{ item.get_discount_tag }}</p>
+									</a>
+                                {% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+                        {% endfor %}
+					</div>
+				</section>
+				<!-- End Best Seller -->
+				<!-- Start Filter Bar -->
+				</div>
+				<!-- End Filter Bar -->
+			</div>
+		</div>
+</body>
+
+    {% include 'scripts.html' %}
+
+{% endblock content %}

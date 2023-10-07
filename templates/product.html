@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+{% load cart_template_tags %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}"/>
+	<title>{{ object.title }}</title>
+</head>
+
+<body>
+	<!-- Start Banner Area -->
+    {% for object in objects %}
+	<section class="banner-area organic-breadcrumb" style="background: url('{{ object.banner_image.url }}')">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+                    <a><h1>{{ object.title }}</h1></a>
+                    <nav class="d-flex align-items-center">
+						<a href="/">{% translate 'Home' %}</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endfor %}
+	<!-- End Banner Area -->
+
+	<!--================Single Product Area =================-->
+{% for object in objects %}
+	<div class="product_image_area">
+		<div class="container">
+			<div class="row s_product_inner">
+				<div class="col-lg-6">
+					<div class="s_Product_carousel">
+						<div class="single-prd-item">
+							<img class="img-fluid" src="{{ object.image_main.url}}" alt="">
+						</div>
+						<div class="single-prd-item">
+							<img class="img-fluid" src="{{ object.image_1.url}}" alt="">
+						</div>
+						<div class="single-prd-item">
+							<img class="img-fluid" src="{{ object.image_2.url}}" alt="">
+						</div>
+                        <div class="single-prd-item">
+							<img class="img-fluid" src="{{ object.image_3.url}}" alt="">
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-5 offset-lg-1">
+					<div class="s_product_text">
+						<h3>{{ object.title }}</h3>
+                        {% if object.discount_price %}
+									<h2 >${{ object.discount_price }}</h2>
+                                    <del>${{ object.price }}</del>
+                                        {% else %}
+                                        <h2>${{ object.price }}</h2>
+                                    {% endif %}
+                        <ul class="list">
+							<li><span>{% translate 'Category' %}</span> : <a class="active" href="/category/{{ object.category }}">{{ object.category }}</a></li>
+							<li><span>{% translate 'Vendor' %}</span> : <a class="active" href="/seller/{{ object.seller.id }}">{{ object.seller }}</a></li>
+                            {% if object.quantity > 5 %}
+							<li><span>{% translate 'Availability' %}</span> : {% translate 'In Stock' %}</li>
+                            {% elif object.quantity < 5 and object.quantity > 0 %}
+							<li><span>{% translate 'Availability' %}</span> : {% translate 'Only few left' %}</li>
+                            {% elif object.quantity == 0 %}
+							<li><span>{% translate 'Availability' %}</span> : {% translate 'Out of Stock!' %}</li>
+                            {% endif %}
+						</ul>
+						<p>{{ object.description }}</p>
+						<div class="card_area d-flex align-items-center">
+                            {% if object.quantity %}
+							<a class="primary-btn" href="{{ object.get_add_to_cart_url }}">{% translate 'Add to Cart' %}</a>
+                            {% elif object.quantity == 0 %}
+                                <a class="primary-btn" style="cursor: not-allowed">{% translate 'Out of Stock' %}</a>
+                                <br>
+                            {% endif %}
+							<a class="icon_btn" href="{% url "core:user_wishlist" object.id %}"><i class="lnr lnr lnr-heart"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--================End Single Product Area =================-->
+{% endfor %}
+	<!--================Product Description Area =================-->
+	<section class="product_description_area">
+		<div class="container">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">{% translate 'Description' %}</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+					 aria-selected="false">{% translate 'Specification' %}</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+					 aria-selected="false">{% translate 'Comments' %}</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
+					 aria-selected="false">{% translate 'Reviews' %}</a>
+				</li>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+                {% for object in objects %}
+				<div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+					<p>{{ object.detailed_description | safe }}</p>
+				</div>
+            {% endfor %}
+				<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+					<div class="table-responsive">
+                        {% for object in objects %}
+						<table class="table">
+							<tbody>
+								<tr>
+									<td>
+										<h5>{% translate 'Width' %}</h5>
+									</td>
+									<td>
+										<h5>{{ object.width }}{% translate 'cm' %}</h5>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<h5>{% translate 'Height' %}</h5>
+									</td>
+									<td>
+										<h5>{{ object.height }}{% translate 'cm' %}</h5>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<h5>{% translate 'Depth' %}</h5>
+									</td>
+									<td>
+										<h5>{{ object.depth }}{% translate 'cm' %}</h5>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<h5>{% translate 'Weight' %}</h5>
+									</td>
+									<td>
+										<h5>{{ object.weight }}{% translate 'kg' %}</h5>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+                        {% endfor %}
+					</div>
+				</div>
+				<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="comment_list">
+                                {% for object in objects %}
+                                {% if not object.comments.all %}
+                                    {% translate 'No comments yet!....' %}
+                                {% else %}
+                                    {% for comment in object.comments.all %}
+								<div class="review_item">
+									<div class="media">
+										<div class="media-body">
+											<strong>{{ comment.name}} - {{ comment.created_at }}</strong>
+                                            {% if request.user == comment.name %}
+                                        <a class="btn-sm btn-outline-danger" role="button" href="{% url 'core:delete-comment' comment.id %}">{% translate 'Delete' %}</a>
+                                    {% endif %}
+										</div>
+									</div>
+									<p>{{ comment.content }}</p>
+								</div>
+                                        <hr/>
+                                    {% endfor %}
+                                {% endif %}
+                                {% endfor %}
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="review_box">
+                            {% if request.user.is_authenticated %}
+								<strong>{% translate 'Post a comment' %}</strong>
+								<form class="row contact_form" action="/comment" method="GET" id="contactForm">
+                                    {% for object in objects %}
+                                <input type="hidden" name="item_slug" id="item_slug" value="{{ object.slug }}">
+                                    {% endfor %}
+									<div class="col-md-12">
+										<div class="form-group">
+											<textarea class="form-control" name="content" id="content" rows="1" placeholder="Message"></textarea>
+										</div>
+									</div>
+									<div class="col-md-12 text-right">
+										<button type="submit" value="submit" class="btn primary-btn">{% translate 'Submit Now' %}</button>
+									</div>
+								</form>
+                            {% else %}
+                            <strong><a href="{% url 'account_login' %}">{% translate 'Login' %}</a> {% translate 'to post a comment' %}</strong>
+							{% endif %}
+                            </div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="row total_rate">
+								<div class="col-6">
+                                    {% for rate in rates %}
+                                        {% if forloop.first %}
+									<div class="box_total">
+										<h5>{% translate 'Overall' %}</h5>
+										<h4>{{ rate.get_avg_rates }}</h4>
+										<h6>({{ rate.get_overall_ratings }} {% translate 'Reviews' %})</h6>
+									</div>
+                                    {% endif %}
+                                    {% endfor %}
+								</div>
+								<div class="col-6">
+                                        <div class="rating_list">
+                                            {% for rate in rates %}
+                                                {% if forloop.first %}
+                                            <h3>Based on {{ rate.get_overall_ratings }} {% translate 'Reviews' %}</h3>
+                                            <ul class="list">
+                                                <li><a href="#">5<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                         class="fa fa-star"></i><i class="fa fa-star"></i> {{ rate.get_5_stars }}</a></li>
+                                                <li><a href="#">4<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                         class="fa fa-star"></i> {{ rate.get_4_stars }}</a></li>
+                                                <li><a href="#">3<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> {{ rate.get_3_stars }}</a></li>
+                                                <li><a href="#">2<i class="fa fa-star"></i><i class="fa fa-star"></i> {{ rate.get_2_stars }}</a></li>
+                                                <li><a href="#">1<i class="fa fa-star"></i> {{ rate.get_1_stars }}</a></li>
+                                            </ul>
+                                                {% endif %}
+                                        {% endfor %}
+                                        </div>
+								</div>
+							</div>
+							<div class="review_list">
+                                {% for rate in rates %}
+                                    {% if rate.content %}
+								<div class="review_item">
+									<div class="media">
+										<div class="media-body">
+											<h4>{{ rate.created_by }} / {{ rate.rating }} <i class="fa fa-star"></i></h4>
+                                            <h5>{{ rate.created_at }}</h5>
+										</div>
+									</div>
+									<p>{{ rate.content }}</p>
+								</div>
+                                    {% if request.user == rate.created_by %}
+                                        <a class="btn-sm btn-outline-danger" role="button" href="{% url 'core:delete-review' rate.id %}">{% translate 'Delete' %}</a>
+                                    {% endif %}
+                                    <hr/>
+                                {% endif %}
+                                {% endfor %}
+							</div>
+						</div>
+						<div class="w-full mt-6 col-lg-6">
+                            <p class="text-center font-weight-bold">{% translate 'Add a Review' %}</p>
+                            {% if request.user.is_authenticated %}
+                            <form method="GET" action="/review" class="p-6 bg-gray-100 rounded-xl">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {% for object in objects %}
+                                <input type="hidden" name="item_slug" id="item_slug" value="{{ object.slug }}">
+                                    {% endfor %}
+                                </div>
+                                <div class="row form-select">
+                                    <p class="font-weight-bold text-uppercase">{% translate 'Your Rating' %}:</p><br>
+                                    <select name="rating">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </select><br>
+                                </div><br><br>
+                                    <div class="col-md-12">
+										<div class="form-group">
+											<textarea class="form-control" name="content" id="content" rows="1" placeholder="Content"></textarea>
+										</div>
+									</div>
+                                    <br><br>
+                                    <div>
+                                        <button class="submit-btn">{% translate 'Submit' %}</button>
+                                    </div>
+                            </form>
+                            {% else %}
+                            <strong><a href="{% url 'account_login' %}">{% translate 'Login' %}</a> {% translate 'to post a review' %}</strong>
+                            {% endif %}
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Product Description Area =================-->
+
+	<!-- Start related-product Area -->
+	<section class="related-product-area section_gap_bottom">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+                    {% if object in items %}
+					<div class="section-title">
+						<h1>{% translate 'Deals of the Week' %}</h1>
+						<p>{% translate 'Grab them while possible!!' %}</p>
+					</div>
+                    {% endif %}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-9">
+					<div class="row">
+                        {% for item in items %}
+                        {% if item.category == object.category and item.title != object.title %}
+						<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+							<div class="single-related-product d-flex">
+								<a href="{{ item.get_absolute_url }}"><img class="img-fluid" src="{{ item.image_main.url }}" alt=""></a>
+								<div class="desc">
+									<a href="" class="title">{{ item.title }}</a>
+									<div class="price">
+										{% if item.discount_price %}
+									<strong>${{ item.discount_price }}</strong>
+									<h6 class="l-through">${{ item.price }}</h6>
+                                        {% else %}
+                                        <strong>${{ item.price }}</strong>
+                                    {% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+                    {% endif %}
+                    {% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End related-product Area -->
+    {% include 'scripts.html' %}
+
+{% endblock content %}
